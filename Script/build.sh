@@ -1,9 +1,9 @@
 #John Parkhurst
+#Not exactly sure why combined.c is there
+#gcc "./Data-Sets/Data Production/combined.c" -o prog
+#./prog -r ./Data-Sets/Data-Set-1--2-procs/img.tga ./Output
+echo "Begin Young Padiwan"
 
-gcc "./Data-Sets/Data Production/combined.c" -o prog
-echo "Compiled!"
-ls ./Output
-#Incorrect number of arguments.
-#Proper usage: rotate -{r|l}+ inputImagePath outFolderPath
-./prog -r ./Data-Sets/Data-Set-1--2-procs/ ./Output
-echo "Done!"
+
+
+echo "Done! a"
