@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <pthread.h>
 //THIS IS DEAD CODE
 void extraCredit(char *comm){
     /* param: nothing
@@ -59,7 +60,6 @@ void extraCredit(char *comm){
     }
 }
 
-
 FILE *openF(char* arr){
     //@param: pointer to char array
     //Opens the file
@@ -82,7 +82,6 @@ DIR *openD(const char* arr){
     @Param: Charachter array(string) of the input folder
     return: pointer to a directory
     */
-    struct dirent *dp;
     DIR *dir;
     const char *dirStr;
     dirStr = arr;
@@ -97,8 +96,35 @@ DIR *openD(const char* arr){
 }
 void handleIter(DIR* direc){
     /*
+    @param: Pointer to a directory
     Handles iterating through the directory(the main process so to speak!)
+    return: void 
     */
+    struct dirent *de;
+    while ((de = readdir(direc)) != NULL){
+        if( de->d_name[0] != '.'){
+            printf("%s\n", de->d_name);
+            //THIS IS WHERE ALL THE MAGIC HAPPENS
+
+
+
+
+
+        }
+    }
+
+    //Code Snippet Here To get the first number
+    /*
+    FILE *tempFil;
+    int num;
+    char list[10];
+    fgets(list, 10, tempFil);
+    */
+    //first number tells you what process it should be ex. 0 4 is process 0
+    //sscanf(list,"%d",&num);
+
+
+    return;
 }
 void compProcess(){
     /*
@@ -106,8 +132,12 @@ void compProcess(){
     */
    return;
 }
+void sleepProcess(){
+    //Empty Function atm
+    return;
+}
 void output(char* filNam){
-
+    //output to a folder
     return;
 }
 
