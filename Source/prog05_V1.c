@@ -15,6 +15,9 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <pthread.h>
+//Globals
+int numProc;
+
 //THIS IS DEAD CODE
 void extraCredit(char *comm){
     /* param: nothing
@@ -94,13 +97,33 @@ DIR *openD(const char* arr){
     }
     return dir;
 }
+void *compProcess(void *vargp){
+    /*
+    This is the computational Process,  we simply write to output a file
+    */
+   printf("TEST\n");
+}
+void sleepProcess(){
+    //Empty Function atm
+    return;
+}
+void output(char* filNam){
+    //output to a folder
+    return;
+}
+
+
 void handleIter(DIR* direc){
     /*
     @param: Pointer to a directory
     Handles iterating through the directory(the main process so to speak!)
     return: void 
     */
+    //Directory structure poiinter and thread ID
     struct dirent *de;
+    //pthread_t thid;
+    //pthread_create(&thid, NULL, compProcess, (void *)&thid);
+    //pthread_exit(NULL);
     while ((de = readdir(direc)) != NULL){
         if( de->d_name[0] != '.'){
             printf("%s\n", de->d_name);
@@ -126,26 +149,14 @@ void handleIter(DIR* direc){
 
     return;
 }
-void compProcess(){
-    /*
-    This is the computational Process,  we simply write to output a file
-    */
-   return;
-}
-void sleepProcess(){
-    //Empty Function atm
-    return;
-}
-void output(char* filNam){
-    //output to a folder
-    return;
-}
+
 
 int main(int argc, char const *argv[])
 {
     //Assigning the directory object
     DIR *dir;
     dir = openD(argv[2]);
+    numProc=(int)argv[1];
     //Starting the "server" so to speak
     handleIter(dir);
     
