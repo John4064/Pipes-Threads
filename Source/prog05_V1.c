@@ -15,8 +15,16 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <pthread.h>
-//Globals
+//Globals & Structures 
+//Long is same memory size of void* so no warning
 int numProc;
+//Structure of argument of threads
+struct args {
+    pthread_t threadID;
+    unsigned int index;
+    char* input;
+};
+
 
 //THIS IS DEAD CODE
 void extraCredit(char *comm){
@@ -97,11 +105,16 @@ DIR *openD(const char* arr){
     }
     return dir;
 }
-void *compProcess(void *vargp){
+void *compProcess(void *arg){
     /*
     This is the computational Process,  we simply write to output a file
     */
-   printf("TEST\n");
+
+   //	ThreadInfo* info = (ThreadInfo*) arg;
+   struct args *myArg =(struct args*)arg;
+   //printf("%s\n", *myArg->input);
+   pthread_exit(NULL);
+   return NULL;
 }
 void sleepProcess(){
     //Empty Function atm
@@ -121,21 +134,43 @@ void handleIter(DIR* direc){
     */
     //Directory structure poiinter and thread ID
     struct dirent *de;
+	struct args *parg = (struct args*) calloc(numProc, sizeof(struct args));
+
+    printf("Starting to employ threads\n");
+	for (unsigned int k=0; k<(unsigned int)numProc; k++){
+        parg[k].index = k;
+        parg[k].input = "abc";
+        printf("%u\n",parg[k].index);
+        printf("%s\n",parg[k].input);
+
+        //After filling the parg with alues create thread
+
+        //pthread_create(&info[k].threadID, NULL, threadFunc, info+k);
+
+    }
+
+	for (unsigned int j=0; j<(unsigned int)numProc; j++){
+        printf("T\n");
+        //void* useless;
+	    //pthread_join(info[k].threadID, &useless);
+    }
+    //Remember to free our calloc
+    free(parg);
+
+
+    //Dead Code Garbage
     //pthread_t thid;
-    //pthread_create(&thid, NULL, compProcess, (void *)&thid);
-    //pthread_exit(NULL);
+    //char* temp = "Tanner";
+    //struct args *parg = {temp,(void *)1}; 
+    //pthread_create(&thid, NULL, compProcess, (void*)&parg);
+    /*
     while ((de = readdir(direc)) != NULL){
         if( de->d_name[0] != '.'){
             printf("%s\n", de->d_name);
             //THIS IS WHERE ALL THE MAGIC HAPPENS
-
-
-
-
-
         }
     }
-
+    */
     //Code Snippet Here To get the first number
     /*
     FILE *tempFil;
@@ -156,15 +191,25 @@ int main(int argc, char const *argv[])
     //Assigning the directory object
     DIR *dir;
     dir = openD(argv[2]);
-    numProc=(int)argv[1];
-    //Starting the "server" so to speak
-    handleIter(dir);
+    
+    numProc = atoi(argv[1]);
+    if(numProc%2==0 && numProc>1 &&numProc<129){
+        //Starting the "server" so to speak
+        handleIter(dir);
+        closedir(dir);
+
+    }else{
+        printf("ERROR IN NUMBER OF DESIRED PROCESSES");
+        printf("REMEMBER TO USE 2-128");
+        closedir(dir);
+        exit(62);
+    }
+
     
 
 
 
 
-    closedir(dir);
 
 
     return 0;
