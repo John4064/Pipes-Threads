@@ -13,7 +13,7 @@ int numProc;
 struct args {
     pthread_t threadID;
     unsigned int index;
-    DIR* direc;
+    const char* direcArr;
     unsigned int pos;
     unsigned int lenP;
 };
@@ -54,20 +54,24 @@ void *compProcess(void *arg){
     /*
     This is the computational Process,  we simply write to output a file
     */
-
     //	ThreadInfo* info = (ThreadInfo*) arg;
     struct args *myArg =(struct args*)arg;
     struct dirent *de;
+    DIR *dir;
+    dir = openD(myArg->direcArr);
+    if (!dir){
+        std::cout << "Directory not found" << std::endl;
+    }
     //printf("The Index should be :%d\n",myArg->index*(myArg->count/numProc));
-    printf("THE PROCESS CREATED\n");
-    while ((de = readdir(myArg->direc)) != NULL){
+    std::cout << ("THE PROCESS CREATED\n");
+    while ((de = readdir(dir)) != NULL){
         if(de->d_name[0] != '.'){
-            //de->d_name
-            printf(".");
+            std::cout<<(".");
             //THIS IS WHERE ALL THE MAGIC HAPPENS
         }
     }
     //printf("%s\n", *myArg->input);
+    closedir(dir);
     pthread_exit(NULL);
     return NULL;
 }
@@ -80,9 +84,9 @@ void output(char* filNam){
     return;
 }
 
-void handleIter(DIR* direc){
+void handleIter(DIR* direc, const char* arr){
     /*
-    @param: Pointer to a directory
+    @param: Pointer to a directory, const char array of directory location
     Handles iterating through the directory(the main process so to speak!)
     return: void 
     */
@@ -90,8 +94,6 @@ void handleIter(DIR* direc){
     struct dirent *de;
     unsigned int count=0;
     //Get the count of the directory 
-
-
     //Calculate # of directory listings
     while ((de = readdir(direc)) != NULL){
         if( de->d_name[0] != '.'){
@@ -100,8 +102,8 @@ void handleIter(DIR* direc){
             //THIS IS WHERE ALL THE MAGIC HAPPENS
         }
     }
+    closedir(direc);
 	struct args *parg = (struct args*) calloc(numProc, sizeof(struct args));
-
     printf("Starting to employ threads\n");
 	for (unsigned int k=0; k<(unsigned int)numProc; k++){
         //WE SPLIT THE DATASET IN two HERE
@@ -109,7 +111,7 @@ void handleIter(DIR* direc){
         //assign thread
         //parg[k].threadID=&parg[k].threadID;
         //File Directory
-        parg[k].direc = direc;
+        parg[k].direcArr = arr;
         parg[k].pos=k*(count/numProc);
         parg[k].lenP=count/numProc;
         //After filling the parg with alues create thread
@@ -120,19 +122,6 @@ void handleIter(DIR* direc){
         void* useless;
 	    pthread_join(parg[j].threadID, &useless);
     }
-    printf("TEST\n");
-    //Remember to free our calloc
-    free(parg);
-    //Dead Code Garbage
-    //pthread_t thid;
-    //struct dirent *de;
-
-    //char* temp = "Tanner";
-    //struct args *parg = {temp,(void *)1}; 
-    //pthread_create(&thid, NULL, compProcess, (void*)&parg);
-    /*
-    */
-    //Code Snippet Here To get the first number
     /*
     FILE *tempFil;
     int num;
@@ -141,8 +130,9 @@ void handleIter(DIR* direc){
     */
     //first number tells you what process it should be ex. 0 4 is process 0
     //sscanf(list,"%d",&num);
-
-
+    std::cout<<("Reached The end\n");
+    //Remember to free our calloc
+    free(parg);
     return;
 }
 
@@ -155,12 +145,11 @@ int main(int argc, char const *argv[])
     numProc = atoi(argv[1]);
     if(numProc%2==0 && numProc>1 &&numProc<129){
         //Starting the "server" so to speak
-        handleIter(dir);
-        closedir(dir);
+        handleIter(dir,argv[2]);
 
     }else{
-        printf("ERROR IN NUMBER OF DESIRED PROCESSES\n");
-        printf("REMEMBER TO USE 2-128\n");
+        std::cout << ("ERROR IN NUMBER OF DESIRED PROCESSES\n");
+        std::cout << ("REMEMBER TO USE 2-128\n");
         closedir(dir);
         exit(62);
     }
