@@ -1,24 +1,14 @@
-/**
- * John T Parkhurst
- * 11/30/21
- * Pipes and Threads
- * We will be implementing a client-server architecture in this version
- * Where one main process acts as the server and all computation process
- * Communicate to server then to the process.
- * (process 1 -> server -> process 2)
- * */
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <dirent.h>
-#include <unistd.h>
+//John Parkhurst
+//12/5/21
+#include <iostream>
+#include <sys/stat.h>
 #include <sys/types.h>
-#include <fcntl.h>
+#include <dirent.h>
 #include <pthread.h>
-//Globals & Structures 
-//Long is same memory size of void* so no warning
+#include <string>
+//Global Variables and structs
 int numProc;
-//Structure of argument of threads
+
 //Thread id, then the process index(used to compare text), directory, current start index, length we iterate through
 struct args {
     pthread_t threadID;
@@ -27,53 +17,6 @@ struct args {
     unsigned int pos;
     unsigned int lenP;
 };
-
-
-//THIS IS DEAD CODE
-void extraCredit(char *comm){
-    /* param: nothing
-     *  This is for Extra credit 2.8
-     *  did not get to fully implement it
-     *  Check report for synopsis of this
-     * return: nothing
-     */
-    int pid = fork();
-    if (pid == 0){
-        //Argument list for exevp
-        //Fill in Comm to argument list with
-        //arglist[i]= strtok(comm,"")
-        char *argument_list[] = {"ls", "-la", NULL};
-        //We set filename = to du_1.out,du_2.out as needed
-        //Here is eclog.out for testing purposes
-
-        const char *filename = "eclog.out";
-        //Make sure filename not null
-        if (filename){
-            //opens file for writing only
-            int fd = open(filename, O_WRONLY, 0666);
-            //WE open up Pipe with dup2
-            //Redirecting all output//errors
-            //To the File fd
-            dup2(fd, STDOUT_FILENO);
-            dup2(fd, STDERR_FILENO);
-            //Right here we exec
-            execvp(argument_list[0], argument_list);
-            close(fd);
-            printf("ONLY IF ERROR\n");
-            printf("CHECK EXEC PARAMATERS\n");
-            exit(-23);
-        }
-        else{
-            printf("ERROR OPENING LOG FILE\n");
-            exit(-23);
-        }
-    }
-    else{
-        waitpid(pid, &pid, 1);
-        printf("Extra Credit is Done\n");
-    }
-}
-
 FILE *openF(char* arr){
     //@param: pointer to char array
     //Opens the file
@@ -90,7 +33,6 @@ FILE *openF(char* arr){
         return fptr;
     }
 }
-
 DIR *openD(const char* arr){
     /*
     @Param: Charachter array(string) of the input folder
@@ -114,11 +56,8 @@ void *compProcess(void *arg){
     */
 
     //	ThreadInfo* info = (ThreadInfo*) arg;
-
-
     struct args *myArg =(struct args*)arg;
     struct dirent *de;
-
     //printf("The Index should be :%d\n",myArg->index*(myArg->count/numProc));
     printf("THE PROCESS CREATED\n");
     while ((de = readdir(myArg->direc)) != NULL){
@@ -140,7 +79,6 @@ void output(char* filNam){
     //output to a folder
     return;
 }
-
 
 void handleIter(DIR* direc){
     /*
@@ -207,7 +145,6 @@ void handleIter(DIR* direc){
 
     return;
 }
-
 
 int main(int argc, char const *argv[])
 {
