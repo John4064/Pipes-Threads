@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <pthread.h>
 #include <string>
+#include <fstream>
 //Global Variables and structs
 int numProc;
 
@@ -17,22 +18,7 @@ struct args {
     unsigned int pos;
     unsigned int lenP;
 };
-FILE *openF(char* arr){
-    //@param: pointer to char array
-    //Opens the file
-    //return: none
-    FILE *fptr;
-    //REMEBER TO USE DOULBE QUOTES
-    fptr = fopen(arr,"r");
-    if(fptr ==NULL){
-        //Use put to not include null character
-        puts("Error While Opening the File");
-        fclose(fptr);
-        exit(69);
-    }else{
-        return fptr;
-    }
-}
+
 DIR *openD(const char* arr){
     /*
     @Param: Charachter array(string) of the input folder
@@ -50,6 +36,15 @@ DIR *openD(const char* arr){
     }
     return dir;
 }
+void sleepProcess(){
+    //Empty Function atm
+    return;
+}
+void output(char* filNam){
+    //output to a folder
+    return;
+}
+
 void *compProcess(void *arg){
     /*
     This is the computational Process,  we simply write to output a file
@@ -64,24 +59,39 @@ void *compProcess(void *arg){
     }
     //printf("The Index should be :%d\n",myArg->index*(myArg->count/numProc));
     std::cout << ("THE PROCESS CREATED\n");
+    int count = 0;
     while ((de = readdir(dir)) != NULL){
         if(de->d_name[0] != '.'){
-            std::cout<<(".");
-            //THIS IS WHERE ALL THE MAGIC HAPPENS
+            if (myArg->pos<=count && count<myArg->pos+myArg->lenP){
+                //These are the files we use
+                //The index is count
+                //de->d_name is file name
+                //String combinations
+                char tempS[1024]= "";
+                strcat(tempS,myArg->direcArr);
+                strcat(tempS,de->d_name);
+                std::ifstream myfile (tempS);
+                std::string line;
+                if (myfile.is_open()){
+                    while ( getline (myfile,line) ){
+                    std::cout << line << '\n';
+                    }
+                    myfile.close();
+                }
+                //std::cout<< de->d_name;
+                //std::cout << myArg->direcArr<<'\n';
+                //first number tells you what process it should be ex. 0 4 is process 0
+                //sscanf(list,"%d",&num);
+            }
+            //Increments the index
+            count++;
         }
     }
+    std::cout <<'\n';
     //printf("%s\n", *myArg->input);
     closedir(dir);
     pthread_exit(NULL);
     return NULL;
-}
-void sleepProcess(){
-    //Empty Function atm
-    return;
-}
-void output(char* filNam){
-    //output to a folder
-    return;
 }
 
 void handleIter(DIR* direc, const char* arr){
@@ -122,14 +132,6 @@ void handleIter(DIR* direc, const char* arr){
         void* useless;
 	    pthread_join(parg[j].threadID, &useless);
     }
-    /*
-    FILE *tempFil;
-    int num;
-    char list[10];
-    fgets(list, 10, tempFil);
-    */
-    //first number tells you what process it should be ex. 0 4 is process 0
-    //sscanf(list,"%d",&num);
     std::cout<<("Reached The end\n");
     //Remember to free our calloc
     free(parg);
@@ -153,13 +155,6 @@ int main(int argc, char const *argv[])
         closedir(dir);
         exit(62);
     }
-
-    
-
-
-
-
-
 
     return 0;
 }
