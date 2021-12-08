@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <pthread.h>
 #include <string>
+#include<unistd.h>
 #include <fstream>
 //Global Variables and structs
 int numProc;
@@ -17,6 +18,7 @@ struct args {
     const char* direcArr;
     unsigned int pos;
     unsigned int lenP;
+    void* tid;
 };
 
 DIR *openD(const char* arr){
@@ -36,13 +38,37 @@ DIR *openD(const char* arr){
     }
     return dir;
 }
-void sleepProcess(){
+void sleepProcess(void){
     //Empty Function atm
     return;
 }
 void output(char* filNam){
     //output to a folder
     return;
+}
+int findNum(std::string myStr){
+    /**@Param: String of line
+     * returns integer of the process
+     **/
+    int mySum = -1;
+    //Iterates thru the string finds the first space then takes the substring
+    //0-index of space and converts to int
+    for(int i = 0; i <myStr.length();i++){
+        if(myStr[i]== ' '){
+            mySum= stoi(myStr.substr(0,i));
+        }
+    }
+    return mySum;
+}
+std::string fileName(long num){
+    /**
+     * @brief String concation to prepare file name
+     * @param: number process for the text file name
+     * @return: the string name of the process file name
+     **/
+    std::string name = "process";
+    name = name+std::to_string(num);
+    return name+".txt";
 }
 
 void *compProcess(void *arg){
@@ -65,23 +91,48 @@ void *compProcess(void *arg){
             if (myArg->pos<=count && count<myArg->pos+myArg->lenP){
                 //These are the files we use
                 //The index is count
-                //de->d_name is file name
                 //String combinations
                 char tempS[1024]= "";
                 strcat(tempS,myArg->direcArr);
                 strcat(tempS,de->d_name);
                 std::ifstream myfile (tempS);
                 std::string line;
+                //The number proc the line is
+                int proc =-1;
                 if (myfile.is_open()){
                     while ( getline (myfile,line) ){
-                    std::cout << line << '\n';
+                        int linenum = findNum(line);
+                        if(linenum == -1){
+                            std::cout <<"ERROR IN DATASET TEXT FILE PROCESS NUMBER\n";
+                            myfile.close();
+                            closedir(dir);
+                            exit(11);
+                        }
+                        //HERE IS WHERE WE DECIDE WHETHER ITS RIGHT PROCESS NUMBER TO PROCESS
+                        if(linenum == long(myArg->tid)){
+                            //Create pipe and pipe out to file
+                            
+                            //These lines go to pipe
+                            //std::cout << line<<'\n';
+                            //String concaction for process ID
+                            std::string filname = fileName(long(myArg->tid));
+                            
+                            int pipefds[2];
+                            int returnstatus = pipe(pipefds);
+                            if(returnstatus == -1){
+                                std::cout <<"Unable to create pipe \n";
+                                myfile.close();
+                                exit(99);
+                            }else{
+                                //Write to the pipe
+                                
+
+
+                                myfile.close();
+                            }
+                        }
                     }
-                    myfile.close();
                 }
-                //std::cout<< de->d_name;
-                //std::cout << myArg->direcArr<<'\n';
-                //first number tells you what process it should be ex. 0 4 is process 0
-                //sscanf(list,"%d",&num);
             }
             //Increments the index
             count++;
@@ -124,6 +175,7 @@ void handleIter(DIR* direc, const char* arr){
         parg[k].direcArr = arr;
         parg[k].pos=k*(count/numProc);
         parg[k].lenP=count/numProc;
+        parg[k].tid= (void *)k;
         //After filling the parg with alues create thread
         pthread_create(&parg[k].threadID, NULL, compProcess, parg+k);
     }
