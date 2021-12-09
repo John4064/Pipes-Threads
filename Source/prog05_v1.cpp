@@ -1,5 +1,7 @@
 //John Parkhurst
 //12/5/21
+#include <cstdio>
+#include <stdio.h>
 #include <iostream>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -125,9 +127,23 @@ void *compProcess(void *arg){
                                 exit(99);
                             }else{
                                 //Write to the pipe
+                                write(pipefds[1], line.c_str(), sizeof(line.c_str()));
+                                close(pipefds[1]);
+                                //Could not figure out the pipe architecture properly 
+                                //So I swapped to a standard output to a file
+                                //To at bear minimum on one round print lines
+                                FILE * fp;
+                                fp = fopen(filname.c_str(), "a");
+                                if(fp == NULL) {
+                                    perror("ERROR IN OPENING File!");
+                                    exit(62);
+                                }else{
+                                    write();
+                                    fputs(line.c_str(),fp);
+                                    fputs("\n",fp);
+                                    fclose(fp);
+                                }
                                 
-
-
                                 myfile.close();
                             }
                         }
