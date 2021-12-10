@@ -1,0 +1,109 @@
+\hypertarget{prog05__v1_8cpp}{}\doxysection{/\+Users/john4064/\+Desktop/\+Workspace/\+C/\+Pipes-\/\+Threads/\+Source/\+Version1/prog05\+\_\+v1.cpp File Reference}
+\label{prog05__v1_8cpp}\index{/Users/john4064/Desktop/Workspace/C/Pipes-\/Threads/Source/Version1/prog05\_v1.cpp@{/Users/john4064/Desktop/Workspace/C/Pipes-\/Threads/Source/Version1/prog05\_v1.cpp}}
+{\ttfamily \#include $<$cstdio$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structargs}{args}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+DIR $\ast$ \mbox{\hyperlink{prog05__v1_8cpp_a3a5af9da98349985310a4e35130f47a4}{openD}} (const char $\ast$arr)
+\item 
+void \mbox{\hyperlink{prog05__v1_8cpp_a468a7d911bfeae35e347bbdeb3cf9169}{sleep\+Process}} (void)
+\item 
+void \mbox{\hyperlink{prog05__v1_8cpp_a41f8122427fadca09616bf2801c3b04f}{output}} (char $\ast$fil\+Nam)
+\item 
+int \mbox{\hyperlink{prog05__v1_8cpp_a1888132ee45e4dd7e28f0583874f6a80}{find\+Num}} (std\+::string my\+Str)
+\item 
+std\+::string \mbox{\hyperlink{prog05__v1_8cpp_a4c3678788dd93f2466f295ad216c35da}{file\+Name}} (long num)
+\item 
+void $\ast$ \mbox{\hyperlink{prog05__v1_8cpp_aae6353ee202d9f90eede7b8d89c3942a}{comp\+Process}} (void $\ast$arg)
+\item 
+void \mbox{\hyperlink{prog05__v1_8cpp_aac6e9aaed0d1031bf3e86dd69acac81a}{handle\+Iter}} (DIR $\ast$direc, const char $\ast$arr)
+\item 
+int \mbox{\hyperlink{prog05__v1_8cpp_abf9e6b7e6f15df4b525a2e7705ba3089}{main}} (int argc, char const $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{prog05__v1_8cpp_a2e5b6651b68c4a47b9b14a1207db5490}{num\+Proc}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{prog05__v1_8cpp_aae6353ee202d9f90eede7b8d89c3942a}\label{prog05__v1_8cpp_aae6353ee202d9f90eede7b8d89c3942a}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!compProcess@{compProcess}}
+\index{compProcess@{compProcess}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{compProcess()}{compProcess()}}
+{\footnotesize\ttfamily void $\ast$ comp\+Process (\begin{DoxyParamCaption}\item[{void $\ast$}]{arg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prog05__v1_8cpp_a4c3678788dd93f2466f295ad216c35da}\label{prog05__v1_8cpp_a4c3678788dd93f2466f295ad216c35da}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!fileName@{fileName}}
+\index{fileName@{fileName}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{fileName()}{fileName()}}
+{\footnotesize\ttfamily std\+::string file\+Name (\begin{DoxyParamCaption}\item[{long}]{num }\end{DoxyParamCaption})}
+
+String concation to prepare file name 
+\begin{DoxyParams}{Parameters}
+{\em } & number process for the text file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: the string name of the process file name
+\end{DoxyReturn}
+\mbox{\Hypertarget{prog05__v1_8cpp_a1888132ee45e4dd7e28f0583874f6a80}\label{prog05__v1_8cpp_a1888132ee45e4dd7e28f0583874f6a80}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!findNum@{findNum}}
+\index{findNum@{findNum}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{findNum()}{findNum()}}
+{\footnotesize\ttfamily int find\+Num (\begin{DoxyParamCaption}\item[{std\+::string}]{my\+Str }\end{DoxyParamCaption})}
+
+@\+Param\+: String of line returns integer of the process\mbox{\Hypertarget{prog05__v1_8cpp_aac6e9aaed0d1031bf3e86dd69acac81a}\label{prog05__v1_8cpp_aac6e9aaed0d1031bf3e86dd69acac81a}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!handleIter@{handleIter}}
+\index{handleIter@{handleIter}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{handleIter()}{handleIter()}}
+{\footnotesize\ttfamily void handle\+Iter (\begin{DoxyParamCaption}\item[{DIR $\ast$}]{direc,  }\item[{const char $\ast$}]{arr }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prog05__v1_8cpp_abf9e6b7e6f15df4b525a2e7705ba3089}\label{prog05__v1_8cpp_abf9e6b7e6f15df4b525a2e7705ba3089}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!main@{main}}
+\index{main@{main}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char const $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prog05__v1_8cpp_a3a5af9da98349985310a4e35130f47a4}\label{prog05__v1_8cpp_a3a5af9da98349985310a4e35130f47a4}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!openD@{openD}}
+\index{openD@{openD}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{openD()}{openD()}}
+{\footnotesize\ttfamily DIR $\ast$ openD (\begin{DoxyParamCaption}\item[{const char $\ast$}]{arr }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prog05__v1_8cpp_a41f8122427fadca09616bf2801c3b04f}\label{prog05__v1_8cpp_a41f8122427fadca09616bf2801c3b04f}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!output@{output}}
+\index{output@{output}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{output()}{output()}}
+{\footnotesize\ttfamily void output (\begin{DoxyParamCaption}\item[{char $\ast$}]{fil\+Nam }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prog05__v1_8cpp_a468a7d911bfeae35e347bbdeb3cf9169}\label{prog05__v1_8cpp_a468a7d911bfeae35e347bbdeb3cf9169}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!sleepProcess@{sleepProcess}}
+\index{sleepProcess@{sleepProcess}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{sleepProcess()}{sleepProcess()}}
+{\footnotesize\ttfamily void sleep\+Process (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{prog05__v1_8cpp_a2e5b6651b68c4a47b9b14a1207db5490}\label{prog05__v1_8cpp_a2e5b6651b68c4a47b9b14a1207db5490}} 
+\index{prog05\_v1.cpp@{prog05\_v1.cpp}!numProc@{numProc}}
+\index{numProc@{numProc}!prog05\_v1.cpp@{prog05\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{numProc}{numProc}}
+{\footnotesize\ttfamily int num\+Proc}
+
